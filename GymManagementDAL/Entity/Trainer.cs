@@ -9,7 +9,7 @@ namespace GymManagementDAL.Entity
 {
     public class Trainer : GymUser
     {
-        public Specialities Specialities { get; set; }
+        public Specialities Specialization { get; set; }
 
         //HireDate => CreatedAt in BaseEntity
         public ICollection<Session> Sessions { get; set; } = null!;

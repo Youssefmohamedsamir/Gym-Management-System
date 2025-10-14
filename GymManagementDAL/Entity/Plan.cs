@@ -11,7 +11,7 @@ namespace GymManagementDAL.Entity
         public string Name { get; set; } = null!;
         public string Description { get; set; } = null!;
         public decimal Price { get; set; }
-        public string? DurationDays { get; set; }
+        public int DurationDays { get; set; }
         public bool IsActive { get; set; }
 
         #region Relation between plan and membership
