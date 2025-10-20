@@ -110,7 +110,7 @@ namespace GymManagementBLL.Services.Sevice
                 ViewModel.MemberShipStartDate = Activemembership.CreatedAt.ToShortDateString();
                 ViewModel.MemberShipEndDate = Activemembership.EndDate.ToShortDateString();
 
-                var plan = _unitOfWork.GenericRepository<Plan>();
+                var plan = _unitOfWork.GenericRepository<Plan>().GetAll().FirstOrDefault();
                 ViewModel.PlanName = plan.Name;
             }
 

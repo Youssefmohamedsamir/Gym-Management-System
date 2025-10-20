@@ -18,6 +18,9 @@ namespace GymManagementDAL.Reposatory.Classes
         {
             dbContext = context;
         }
+
+        
+
         public void Add(TEntity entity)=> dbContext.Set<TEntity>().Add(entity);
 
 
@@ -26,7 +29,7 @@ namespace GymManagementDAL.Reposatory.Classes
 
         public IEnumerable<TEntity> GetAll(Func<TEntity, bool>? condition = null)
         {
-            if (condition == null)
+            if (condition is not null)
                 return dbContext.Set<TEntity>().AsNoTracking().ToList();
             else
                 return dbContext.Set<TEntity>().AsNoTracking().Where(condition).ToList();

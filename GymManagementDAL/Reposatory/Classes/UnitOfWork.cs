@@ -14,11 +14,13 @@ namespace GymManagementDAL.Reposatory.Classes
         private readonly Dictionary<Type, object> _repositoryeDictionary = new();
         private readonly GymDbContext context;
 
-        public UnitOfWork(GymDbContext context)
+        public UnitOfWork(GymDbContext context , ISessionRepository sessionRepository)
         {
             this.context = context;
+            SessionRepository = sessionRepository;
         }
 
+        public ISessionRepository SessionRepository { get; }
 
         public IGenericRepository<TEntity> GenericRepository<TEntity>() where TEntity : BaseEntity, new()
         {
@@ -29,6 +31,11 @@ namespace GymManagementDAL.Reposatory.Classes
             var newRepo = new GenericRepository<TEntity>(context);
             _repositoryeDictionary[EntityType] = newRepo;
             return newRepo;
+        }
+
+        public object GetRepository<T>()
+        {
+            throw new NotImplementedException();
         }
 
         public int SaveChanges()

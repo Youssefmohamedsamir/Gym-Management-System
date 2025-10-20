@@ -204,8 +204,8 @@ namespace GymManagementDAL.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("varchar");
 
-                    b.Property<string>("DurationDays")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("DurationDays")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -310,7 +310,7 @@ namespace GymManagementDAL.Migrations
                         .HasMaxLength(11)
                         .HasColumnType("varchar");
 
-                    b.Property<int>("Specialities")
+                    b.Property<int>("Specialization")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedAt")
