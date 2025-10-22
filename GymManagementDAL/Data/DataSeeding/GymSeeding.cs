@@ -35,7 +35,6 @@ namespace GymManagementDAL.Data.DataSeeding
             }
             catch (Exception ex)
             {
-                throw new Exception("An error occurred while seeding the database.", ex);
                 return false;
             }
         }

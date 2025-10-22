@@ -1,4 +1,6 @@
 using GymManagementBLL;
+using GymManagementBLL.Services.Interface;
+using GymManagementBLL.Services.Sevice;
 using GymManagementDAL.Data.Context;
 using GymManagementDAL.Data.DataSeeding;
 using GymManagementDAL.Entity;
@@ -16,12 +18,20 @@ namespace GymManagementPL
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
             builder.Services.AddDbContext<GymDbContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
-            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            
+
             builder.Services.AddScoped<ISessionRepository, SessionRepository>();
+            builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            builder.Services.AddScoped<IAnalaticsService, AnalyticsService>();
+
             builder.Services.AddAutoMapper(X =>X.AddProfile(new MappingProfiles()));
             var app = builder.Build();
 
@@ -35,6 +45,7 @@ namespace GymManagementPL
 
 
             #endregion
+
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
