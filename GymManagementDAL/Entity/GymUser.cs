@@ -29,6 +29,6 @@ namespace GymManagementDAL.Entity
         public int BuildingNo { get; set; }
         public string Street { get; set; } = null!;
         public string City { get; set; } = null!;
-        
+        public int BuildingNumber { get; set; }
     }
 }

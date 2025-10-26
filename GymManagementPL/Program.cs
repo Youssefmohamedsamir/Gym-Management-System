@@ -6,6 +6,8 @@ using GymManagementDAL.Data.DataSeeding;
 using GymManagementDAL.Entity;
 using GymManagementDAL.Reposatory.Classes;
 using GymManagementDAL.Reposatory.Interfaces;
+using GymManagementSystemBLL.Services.Classes;
+using GymManagementSystemBLL.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace GymManagementPL
@@ -33,6 +35,8 @@ namespace GymManagementPL
             builder.Services.AddScoped<IAnalaticsService, AnalyticsService>();
 
             builder.Services.AddAutoMapper(X =>X.AddProfile(new MappingProfiles()));
+            builder.Services.AddScoped<IMemberService, MemberServce>();
+            builder.Services.AddScoped<ITrainerService, TrainerService>();
             var app = builder.Build();
 
             #region MigrateDatabase - Data Seeding

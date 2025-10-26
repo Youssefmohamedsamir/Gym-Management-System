@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GymManagementBLL.ViewModel.MemberViewModel
 {
-    internal class CreateViewModel
+    public class CreateViewModel
     {
 
         [Required(ErrorMessage = "Name Is Required")]

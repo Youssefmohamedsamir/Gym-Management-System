@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace GymManagementBLL.Services.Interface
 {
-    internal interface IMemberService
+     public interface IMemberService
     {
-        IEnumerable<MemberViewModel> GetAll();
+        IEnumerable<MemberViewModel> GetAllMembers();
         bool CreateMember(CreateViewModel createmember);
 
         MemberViewModel? GetMemberDetails(int MemberId);

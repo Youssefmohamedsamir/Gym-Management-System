@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace GymManagementBLL.Services.Sevice
 {
-    internal class MemberServce : IMemberService
+    public class MemberServce : IMemberService
     {
         private readonly IUnitOfWork _unitOfWork;
         public MemberServce(IUnitOfWork unitOfWork)
@@ -20,7 +20,7 @@ namespace GymManagementBLL.Services.Sevice
            _unitOfWork = unitOfWork;
         }
 
-        public IEnumerable<MemberViewModel> GetAll()
+        public IEnumerable<MemberViewModel> GetAllMembers()
         {
             var data = _unitOfWork.GenericRepository<Member>().GetAll();
 
@@ -111,7 +111,7 @@ namespace GymManagementBLL.Services.Sevice
                 ViewModel.MemberShipEndDate = Activemembership.EndDate.ToShortDateString();
 
                 var plan = _unitOfWork.GenericRepository<Plan>().GetAll().FirstOrDefault();
-                ViewModel.PlanName = plan.Name;
+                ViewModel.PlanName = plan!.Name;
             }
 
             return ViewModel;
@@ -154,7 +154,13 @@ namespace GymManagementBLL.Services.Sevice
             try
             {
                
-                if (IsEmailExists(UpdatedMember.Email) && IsPhoneExists(UpdatedMember.Phone)) return false;
+                var emailExists = _unitOfWork.GenericRepository<Member>()
+                    .GetAll(X => X.Email == UpdatedMember.Email && X.id != id);
+
+                var PhoneExist = _unitOfWork.GenericRepository<Member>()
+                   .GetAll(X => X.Phone == UpdatedMember.Phone && X.id != id);
+
+                if (emailExists.Any() || PhoneExist.Any()) return false;
 
                 var Repo = _unitOfWork.GenericRepository<Member>();
                 var Member = Repo.GetById(id);
@@ -181,9 +187,15 @@ return false;
             var MemberRepo = _unitOfWork.GenericRepository<Member>();
             var member = MemberRepo.GetById(MemberId);
             if (member is null) return false;
-            var HasActiveMemberSessions = _unitOfWork.GenericRepository<MemberSession>()
-                .GetAll(X => X.MemberId == MemberId && X.Session.StartDate > DateTime.Now);
-            if (HasActiveMemberSessions.Any()) return false;
+
+            var SessionId = _unitOfWork.GenericRepository<MemberSession>()
+                .GetAll(X => X.MemberId == MemberId ).Select(X => X.SessionId);
+            
+
+            var HasFutureReservations = _unitOfWork.GenericRepository<Session>()
+                .GetAll(X => SessionId.Contains(X.id) && X.StartDate > DateTime.Now).Any();
+
+            if (HasFutureReservations) return false;
 
             var MemberShips = _unitOfWork.GenericRepository<MemberShip>().GetAll(X => X.MemberId == MemberId);
 
@@ -218,7 +230,6 @@ return false;
 
         }
 
-       
         #endregion
     }
 }
