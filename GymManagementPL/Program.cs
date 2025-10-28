@@ -33,7 +33,8 @@ namespace GymManagementPL
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             builder.Services.AddScoped<IAnalaticsService, AnalyticsService>();
-
+            builder.Services.AddScoped<IPlanService, PlanService>();
+            builder.Services.AddScoped<ISessionService, SessionService>();
             builder.Services.AddAutoMapper(X =>X.AddProfile(new MappingProfiles()));
             builder.Services.AddScoped<IMemberService, MemberServce>();
             builder.Services.AddScoped<ITrainerService, TrainerService>();

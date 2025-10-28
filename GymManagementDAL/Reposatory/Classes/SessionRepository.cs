@@ -15,7 +15,7 @@ namespace GymManagementDAL.Reposatory.Classes
         private readonly GymDbContext dbcontext;
         public SessionRepository(GymDbContext context) : base(context)
         {
-         context = dbcontext;
+         dbcontext = context;
         }
         public IEnumerable<Session> GetAllSessionWithTrainerAndCategory()
         {

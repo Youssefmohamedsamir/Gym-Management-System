@@ -52,7 +52,7 @@ namespace GymManagementPL.Controllers
 
         #endregion
 
-        #region Create Member
+        #region Create Trainer
         public ActionResult Create()
         {
             return View();

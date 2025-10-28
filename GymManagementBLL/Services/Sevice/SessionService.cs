@@ -5,7 +5,7 @@ using GymManagementDAL.Entity;
 using GymManagementDAL.Reposatory.Interfaces;
 using GymManagementSystemBLL.ViewModels.SessionViewModels;
 using System;
-
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,12 +22,13 @@ namespace GymManagementBLL.Services.Sevice
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
+       
 
-        public bool CreateSession(SessionViewModel CreatedSession)
+        public bool CreateSession(CreateSessionViewModel CreatedSession)
         {
             try
             {
-                if (!IsTrainerExist(CreatedSession.Id) || !IsCategoryExist(CreatedSession.Id) || !IsDateValid(CreatedSession.StartDate, CreatedSession.EndDate))
+                if (!IsTrainerExist(CreatedSession.TrainerId) || !IsCategoryExist(CreatedSession.CategoryId) || !IsDateValid(CreatedSession.StartDate, CreatedSession.EndDate))
                     return false;
 
                 if (CreatedSession.Capacity > 25 || CreatedSession.Capacity < 0)
@@ -117,6 +118,19 @@ namespace GymManagementBLL.Services.Sevice
             }
         }
 
+        public IEnumerable<TrainerSelectViewModel> GetTrainersForDropDown()
+        {
+            var Trainers = _unitOfWork.GenericRepository<Trainer>().GetAll();
+            return _mapper.Map<IEnumerable<TrainerSelectViewModel>>(Trainers);
+        }
+
+        public IEnumerable<CategorySelectViewModel> GetCategorysForDropDown()
+        {
+            var Categories = _unitOfWork.GenericRepository<Category>().GetAll();
+            return _mapper.Map<IEnumerable<CategorySelectViewModel>>(Categories);
+        }
+
+
         #region Helper Method
 
         private bool IsSessionAvailableForUpdate(Session session)
@@ -154,10 +168,13 @@ namespace GymManagementBLL.Services.Sevice
 
         private bool IsDateValid(DateTime StartDate, DateTime EndDate)
         {
-            return StartDate < EndDate;
+            return StartDate < EndDate && DateTime.Now < StartDate;
         }
 
-       
+        
+
+
+
 
 
         #endregion
