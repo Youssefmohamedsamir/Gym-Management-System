@@ -1,4 +1,5 @@
-﻿using GymManagementBLL.Services.Interface;
+﻿using GymManagementBLL.Services.AttachmentService;
+using GymManagementBLL.Services.Interface;
 using GymManagementBLL.ViewModel.MemberViewModel;
 using GymManagementDAL.Entity;
 using GymManagementDAL.Reposatory.Classes;
@@ -15,9 +16,11 @@ namespace GymManagementBLL.Services.Sevice
     public class MemberServce : IMemberService
     {
         private readonly IUnitOfWork _unitOfWork;
-        public MemberServce(IUnitOfWork unitOfWork)
+        private readonly IAttachmentService _attachmentService;
+        public MemberServce(IUnitOfWork unitOfWork , IAttachmentService attachmentService)
         {
            _unitOfWork = unitOfWork;
+            _attachmentService = attachmentService;
         }
 
         public IEnumerable<MemberViewModel> GetAllMembers()
@@ -51,6 +54,10 @@ namespace GymManagementBLL.Services.Sevice
       
                 //If One Of Them Exists Return False
                 if (IsEmailExists(createmember.Email) && IsPhoneExists(createmember.Phone)) return false;
+
+                var photoName = _attachmentService.Upload("Members", createmember.PhotoFile);
+                if (string.IsNullOrEmpty(photoName)) return false;
+
                 //If Not Add Member And Return True if Added
                 var member = new Member()
                 {
@@ -74,8 +81,18 @@ namespace GymManagementBLL.Services.Sevice
                     }
 
                 };
-                 _unitOfWork.GenericRepository<Member>().Add(member);
-                return _unitOfWork.SaveChanges() > 0;
+                member.Photo = photoName;
+                _unitOfWork.GenericRepository<Member>().Add(member);
+                var isCreated =  _unitOfWork.SaveChanges() > 0;
+                if (!isCreated)
+                {
+                    _attachmentService.Delete(photoName, "members");
+                    return false;
+                }
+                else
+                {
+                    return isCreated;
+                }
             }
             catch (Exception)
             {
@@ -209,7 +226,12 @@ return false;
                     }
                 }
                 MemberRepo.Delete(member);
-                return _unitOfWork.SaveChanges() > 0;
+                var IsDeleted = _unitOfWork.SaveChanges() > 0;
+                if (IsDeleted)
+                
+                    _attachmentService.Delete(member.Photo, "members"); 
+                
+                    return IsDeleted;
             }
             catch
             {

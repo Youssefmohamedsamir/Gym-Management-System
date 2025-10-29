@@ -1,6 +1,10 @@
 ﻿@using GymManagementBLL.ViewModel.MemberViewModel
 @model IEnumerable<MemberViewModel>
 
+@{
+    ViewData["Title"] = "Members";
+}
+
 @if(TempData["SuccessMessage"] is not null)
 {
     <div id="Alert" class="alert alert-success alert-dismissible fade show">
@@ -50,7 +54,7 @@
                                             <span class="avatar">
                                                 @if (string.IsNullOrEmpty(member.Photo))
                                                 {
-                                                    <img src="~/images/User.jpg" alt="Default Avatar" class="rounded-circle"
+                                                    <img src="~/images/members/@member.Photo" alt="Default Avatar" class="rounded-circle"
                                                     style="width: 40px; height: 40px;" />
                                                 }
                                                 else

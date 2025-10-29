@@ -10,7 +10,7 @@ namespace GymManagementDAL.Entity
 {
     public abstract class GymUser:BaseEntity
     {
-        public int id { get; set; }
+        public int id { get; set; } 
         public string Name { get; set; } = null!;
 
         public string Email { get; set; } = null!;
